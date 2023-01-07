@@ -1,8 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/get_instance.dart';
 import 'package:localization/localization.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:weather/controllers/weather_controller.dart';
+import 'package:weather/models/weather.dart';
+import 'package:weather/services/position_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -14,16 +19,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final RoundedLoadingButtonController _btnController = RoundedLoadingButtonController();
-
-  Future<void> _doSomething() async {
-    Timer(Duration(seconds: 3), () {
-      _btnController.stop();
-    });
-  }
-
-  Future<void> _reset() async {
-
-  }
+  final controller = Get.put(WeatherController());
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +39,7 @@ class _HomePageState extends State<HomePage> {
     return RoundedLoadingButton(
       controller: _btnController,
       onPressed: () async {
-        await _doSomething();
+        await _onLoadButtonPressed();
       },
       child: Text('refresh_weather'.i18n(), style: const TextStyle(color: Colors.white))
     );
@@ -59,6 +55,27 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  Future<void> _onLoadButtonPressed() async {
+    try{
+      await checkPermission();
+    } catch (e){
+      _showSnackBar("permission_error".i18n());
+      _btnController.stop();
+      return;
+    }
+
+    await controller.getWeatherData(_showSnackBar, _onWeatherDataSuccess);
+    _btnController.stop();
+  }
+
+  _onWeatherDataSuccess(Weather weather){
+    _showSnackBar(weather.name);
+  }
+
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> _showSnackBar(String message){
+    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 }
 

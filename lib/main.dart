@@ -2,7 +2,7 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:localization/localization.dart';
-import 'package:weather/views/HomePage.dart';
+import 'package:weather/views/home_page.dart';
 import 'package:page_transition/page_transition.dart';
 
 void main() {

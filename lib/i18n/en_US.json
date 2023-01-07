@@ -1,4 +1,5 @@
 {
   "title": "Weather App",
-  "refresh_weather": "Refresh weather"
+  "refresh_weather": "Refresh weather",
+  "permission_error": "Location permission is necessary for the app"
 }
