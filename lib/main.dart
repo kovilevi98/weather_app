@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:localization/localization.dart';
 import 'package:weather/views/home_page.dart';
-import 'package:page_transition/page_transition.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
         home: AnimatedSplashScreen(
             duration: 1000,
             splash: Icons.sunny,
-            nextScreen: HomePage(title: 'title'.i18n()),
+            nextScreen: const HomePage(),
             centered: true,
             splashTransition: SplashTransition.rotationTransition,
             backgroundColor: Colors.blue));

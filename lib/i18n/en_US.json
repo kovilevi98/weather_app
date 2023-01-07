@@ -1,5 +1,7 @@
 {
   "title": "Weather App",
-  "refresh_weather": "Refresh weather",
-  "permission_error": "Location permission is necessary for the app"
+  "refresh_weather": "Refresh data",
+  "permission_error": "Location permission is necessary for the app",
+  "current_temperature": "Current temperature: ",
+  "celsius": "°C"
 }

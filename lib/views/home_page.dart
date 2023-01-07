@@ -10,16 +10,17 @@ import 'package:weather/models/weather.dart';
 import 'package:weather/services/position_service.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.title});
-  final String title;
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final RoundedLoadingButtonController _btnController = RoundedLoadingButtonController();
+  final RoundedLoadingButtonController _btnController =
+      RoundedLoadingButtonController();
   final controller = Get.put(WeatherController());
+  String temperature = "";
 
   @override
   Widget build(BuildContext context) {
@@ -28,39 +29,42 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _title(context),
-          _buildLocationButton(context)
-        ],
+          (temperature != "") ? _title(context) : Container(),
+          _buildLocationButton(context)],
       ),
     );
   }
 
   Widget _buildLocationButton(BuildContext context) {
     return RoundedLoadingButton(
-      controller: _btnController,
-      onPressed: () async {
-        await _onLoadButtonPressed();
-      },
-      child: Text('refresh_weather'.i18n(), style: const TextStyle(color: Colors.white))
-    );
+        controller: _btnController,
+        onPressed: () async {
+          await _onLoadButtonPressed();
+        },
+        child: Text('refresh_weather'.i18n(),
+            style: const TextStyle(color: Colors.white)));
   }
 
   Widget _title(BuildContext context) {
-    return Expanded(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("hallo"),
-        ],
-      ),
-    );
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "current_temperature".i18n(),
+              style: Theme.of(context).textTheme.headline6,
+            ),
+            Text(temperature, style: Theme.of(context).textTheme.headline6,),
+          ],
+        ));
   }
 
   Future<void> _onLoadButtonPressed() async {
-    try{
+    try {
       await checkPermission();
-    } catch (e){
+    } catch (e) {
       _showSnackBar("permission_error".i18n());
       _btnController.stop();
       return;
@@ -70,12 +74,16 @@ class _HomePageState extends State<HomePage> {
     _btnController.stop();
   }
 
-  _onWeatherDataSuccess(Weather weather){
-    _showSnackBar(weather.name);
+  void _onWeatherDataSuccess(Weather weather) {
+    setState((){
+      temperature = weather.main.temp.toString() + "celsius".i18n();
+    });
+
   }
 
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> _showSnackBar(String message){
-    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> _showSnackBar(
+      String message) {
+    return ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 }
-
