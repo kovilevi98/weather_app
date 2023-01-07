@@ -35,6 +35,10 @@ dependencies:
   localization: ^2.1.0
   rounded_loading_button: ^2.0.8
   animated_splash_screen: ^1.3.0
+  dio: ^4.0.6
+  geolocator: ^9.0.2
+  get_storage: ^2.0.3
+  get: ^4.6.5
 
 
   # The following adds the Cupertino Icons font to your application.
